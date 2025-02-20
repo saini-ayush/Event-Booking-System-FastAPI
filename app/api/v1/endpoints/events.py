@@ -121,7 +121,7 @@ async def get_available_events(
 ):
     events = db.query(EventModel).filter(
         EventModel.available_tickets > 0,
-        EventModel.date > datetime.utcnow()
+        EventModel.date > datetime.now()
     ).offset(skip).limit(limit).all()
     return events 
 

@@ -123,7 +123,7 @@ async def cancel_booking(
         db.delete(booking)
         db.commit()
         
-        return {"message": "Booking cancelled successfully"}
+        return booking
     except Exception as e:
         db.rollback()
         raise HTTPException(
@@ -131,13 +131,14 @@ async def cancel_booking(
             detail="Error cancelling booking"
         )
 
-@router.get("/events/history", response_model=List[Booking])
+@router.post("/events/history", response_model=List[Booking])
 async def get_booking_history(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
+    print(current_user.id)
     bookings = db.query(BookingModel).filter(
-        BookingModel.user_id == current_user.id
+        BookingModel.user_id == int(current_user.id)
     ).order_by(BookingModel.booking_date.desc()).all()
     
     return bookings
