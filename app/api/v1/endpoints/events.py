@@ -25,6 +25,12 @@ async def create_event(
         **event.model_dump(),
         available_tickets=event.total_tickets
     )
+
+    if db_event.date < datetime.now():
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Event date must be in the future"
+        )
     db.add(db_event)
     try:
         db.commit()
@@ -54,7 +60,7 @@ async def update_event(
             detail="Event not found"
         )
     
-    update_data = event_update.dict(exclude_unset=True)
+    update_data = event_update.model_dump(exclude_unset=True)
     for key, value in update_data.items():
         if key == "total_tickets":
             ticket_difference = value - db_event.total_tickets

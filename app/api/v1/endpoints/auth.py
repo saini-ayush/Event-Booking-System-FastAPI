@@ -17,6 +17,12 @@ router = APIRouter()
 
 @router.post("/register", response_model=User, status_code=status.HTTP_201_CREATED)
 async def register_user(user: UserCreate, db: Session = Depends(get_db)):
+    if user.password == "" or user.password is None:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Password is required"
+        )
+
     db_user = db.query(UserModel).filter(UserModel.email == user.email).first()
     if db_user:
         raise HTTPException(
