@@ -18,6 +18,7 @@ A FastAPI-based REST API for managing events and bookings with role-based access
 - SQLAlchemy
 - Pydantic
 - JWT Authentication
+- Pytest Testing for API endpoints
 
 ## Installation 🚀
 
@@ -40,6 +41,7 @@ pip install -r requirements.txt
 4. Create a `.env` file in the root directory:
 ```env
 DATABASE_URL=postgresql://username:password@localhost:5432/event_booking_db
+DATABASE_URL_TEST=postgresql://username:password@localhost:5432/event_booking_db_test
 SECRET_KEY=your_secret_key_here
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=30
@@ -91,27 +93,36 @@ The API uses standard HTTP status codes:
 - 404: Not Found
 - 500: Internal Server Error
 
+## Pytest Testing
+For testing API endpoints run the below command in terminal.
+
+```sql
+CREATE DATABASE event_booking_db_test;
+```
+
+```bash
+pytest
+```
+
 ## Project Structure 
 
 ```
 └── 📁FastAPIEventManagement
     └── 📁app
+        └── __init__.py
         └── 📁api
             └── __init__.py
             └── 📁v1
                 └── __init__.py
                 └── 📁endpoints
-                    └── 📁__pycache__
                     └── auth.py
                     └── booking.py
                     └── events.py
                 └── router.py
-        └── config.py
         └── 📁core
             └── __init__.py
             └── security.py
         └── database.py
-        └── dependencies.py
         └── main.py
         └── 📁models
             └── __init__.py
@@ -123,6 +134,12 @@ The API uses standard HTTP status codes:
             └── booking.py
             └── event.py
             └── user.py
+        └── 📁tests
+            └── __init__.py
+            └── conftest.py
+            └── test_auth.py
+            └── test_bookings.py
+            └── test_events.py
     └── .env
     └── .gitignore
     └── README.md
